@@ -1,0 +1,2 @@
+# COURSE-PROJECT-OOP
+COURSE PROJECT OOP С++, Medicine system
