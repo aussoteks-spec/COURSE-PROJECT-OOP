@@ -1,9 +1,7 @@
 #include "authSys.h"
 
 using namespace std;
-SetConsoleCP(1251);
-SetConsoleOutputCP(1251);
-Console::hideCursor();
+
 //ôóíêöèÿ äëÿ õåøèðîâàíèÿ ïàðîëåé
 string hashPassword(const string& password) {
     try {
@@ -313,3 +311,4 @@ bool AuthSystem::hasAnyAdmin() {
     return false;
 
 }
+
