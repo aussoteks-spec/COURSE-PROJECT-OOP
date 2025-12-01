@@ -1,8 +1,10 @@
 #include "authSys.h"
 
 using namespace std;
-
-//функция для хеширования паролей
+SetConsoleCP(1251);
+SetConsoleOutputCP(1251);
+Console::hideCursor();
+//ГґГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГµГҐГёГЁГ°Г®ГўГ Г­ГЁГї ГЇГ Г°Г®Г«ГҐГ©
 string hashPassword(const string& password) {
     try {
         string salt = "medical_system_Ksenon_2025";
@@ -15,7 +17,7 @@ string hashPassword(const string& password) {
         return result;
     }
     catch (const exception& e) {
-        throw runtime_error("Ошибка хеширования пароля ");
+        throw runtime_error("ГЋГёГЁГЎГЄГ  ГµГҐГёГЁГ°Г®ГўГ Г­ГЁГї ГЇГ Г°Г®Г«Гї ");
     }
 }
 
@@ -24,10 +26,10 @@ AuthSystem::AuthSystem(const string& file) : filename(file) {
         readFile(filename);
     }
     catch (const exception& e) {
-        cout << "Предупреждение: " << e.what() << endl;
+        cout << "ГЏГ°ГҐГ¤ГіГЇГ°ГҐГ¦Г¤ГҐГ­ГЁГҐ: " << e.what() << endl;
     }
 }
-//функция записи строки в бинарный файл
+//ГґГіГ­ГЄГ¶ГЁГї Г§Г ГЇГЁГ±ГЁ Г±ГІГ°Г®ГЄГЁ Гў ГЎГЁГ­Г Г°Г­Г»Г© ГґГ Г©Г«
 void AuthSystem::writeString(ofstream& f, const string& s) {
      int len = (int)s.size();
      f.write(reinterpret_cast<const char*>(&len), sizeof(len));
@@ -35,16 +37,16 @@ void AuthSystem::writeString(ofstream& f, const string& s) {
          f.write(s.data(), len);
      }
      if (f.fail()) {
-         throw runtime_error("Ошибка записи строки в файл");
+         throw runtime_error("ГЋГёГЁГЎГЄГ  Г§Г ГЇГЁГ±ГЁ Г±ГІГ°Г®ГЄГЁ Гў ГґГ Г©Г«");
      }
 }
-//функция чтения строки из бинарного файла
+//ГґГіГ­ГЄГ¶ГЁГї Г·ГІГҐГ­ГЁГї Г±ГІГ°Г®ГЄГЁ ГЁГ§ ГЎГЁГ­Г Г°Г­Г®ГЈГ® ГґГ Г©Г«Г 
 string AuthSystem::readString(ifstream& f) {
     int len = 0;
     f.read(reinterpret_cast<char*>(&len), sizeof(len));
 
     if (f.fail()) {
-        throw runtime_error("Ошибка чтения длины строки из файла");
+        throw runtime_error("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї Г¤Г«ГЁГ­Г» Г±ГІГ°Г®ГЄГЁ ГЁГ§ ГґГ Г©Г«Г ");
     }
 
     if (len < 0 || len > 1000000) {
@@ -59,16 +61,16 @@ string AuthSystem::readString(ifstream& f) {
     f.read(&s[0], len);
 
     if (f.fail()) {
-        throw runtime_error("Ошибка чтения данных строки из файла");
+        throw runtime_error("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї Г¤Г Г­Г­Г»Гµ Г±ГІГ°Г®ГЄГЁ ГЁГ§ ГґГ Г©Г«Г ");
     }
 
     return s;
 }
-//функция сохранения пользователей в бинарный файл
+//ГґГіГ­ГЄГ¶ГЁГї Г±Г®ГµГ°Г Г­ГҐГ­ГЁГї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ© Гў ГЎГЁГ­Г Г°Г­Г»Г© ГґГ Г©Г«
 void AuthSystem::writeFile(const string& file) {
     ofstream f(file, ios::binary | ios::trunc);
     if (!f.is_open()) {
-        throw runtime_error("Не удалось открыть файл для записи: " + file);
+        throw runtime_error("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г®ГІГЄГ°Г»ГІГј ГґГ Г©Г« Г¤Г«Гї Г§Г ГЇГЁГ±ГЁ: " + file);
     }
 
     int count = users.size();
@@ -82,12 +84,12 @@ void AuthSystem::writeFile(const string& file) {
     }
 
     if (f.fail()) {
-        throw runtime_error("Ошибка записи данных в файл: " + file);
+        throw runtime_error("ГЋГёГЁГЎГЄГ  Г§Г ГЇГЁГ±ГЁ Г¤Г Г­Г­Г»Гµ Гў ГґГ Г©Г«: " + file);
     }
 
     f.close();
 }
-//функция выгрузки пользователей из бинарного файла в память
+//ГґГіГ­ГЄГ¶ГЁГї ГўГ»ГЈГ°ГіГ§ГЄГЁ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ© ГЁГ§ ГЎГЁГ­Г Г°Г­Г®ГЈГ® ГґГ Г©Г«Г  Гў ГЇГ Г¬ГїГІГј
 void AuthSystem::readFile(const string& file) {
     ifstream f(file, ios::binary);
     if (!f.is_open()) {
@@ -98,7 +100,7 @@ void AuthSystem::readFile(const string& file) {
     f.read(reinterpret_cast<char*>(&count), sizeof(count));
 
     if (f.fail()) {
-        throw runtime_error("Ошибка чтения количества пользователей из файла");
+        throw runtime_error("ГЋГёГЁГЎГЄГ  Г·ГІГҐГ­ГЁГї ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ© ГЁГ§ ГґГ Г©Г«Г ");
     }
 
     for (int i = 0; i < count; i++) {
@@ -113,94 +115,94 @@ void AuthSystem::readFile(const string& file) {
     f.close();
 }
 
-//добавляет админа с уникальным логином
+//Г¤Г®ГЎГ ГўГ«ГїГҐГІ Г Г¤Г¬ГЁГ­Г  Г± ГіГ­ГЁГЄГ Г«ГјГ­Г»Г¬ Г«Г®ГЈГЁГ­Г®Г¬
 bool AuthSystem::addAdmin(const string& login, const string& pass, const string& fullName) {
     try {
         if (login.empty() || pass.empty()) {
-            throw invalid_argument("Логин и пароль не могут быть пустыми");
+            throw invalid_argument("Г‹Г®ГЈГЁГ­ ГЁ ГЇГ Г°Г®Г«Гј Г­ГҐ Г¬Г®ГЈГіГІ ГЎГ»ГІГј ГЇГіГ±ГІГ»Г¬ГЁ");
         }
 
         string hashedPass = hashPassword(pass);
 
         if (contains<vector<User>>(users, User{ login, "", "", "" })) {
-            throw runtime_error("Пользователь с логином '" + login + "' уже существует");
+            throw runtime_error("ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г± Г«Г®ГЈГЁГ­Г®Г¬ '" + login + "' ГіГ¦ГҐ Г±ГіГ№ГҐГ±ГІГўГіГҐГІ");
         }
 
         users.push_back({ login, hashedPass, "admin", fullName });
         writeFile(filename);
-        cout << "Администратор успешно добавлен!\n";
+        cout << "ГЂГ¤Г¬ГЁГ­ГЁГ±ГІГ°Г ГІГ®Г° ГіГ±ГЇГҐГёГ­Г® Г¤Г®ГЎГ ГўГ«ГҐГ­!\n";
         return true;
     }
     catch (const exception& e) {
-        cout << "Ошибка добавления администратора: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГї Г Г¤Г¬ГЁГ­ГЁГ±ГІГ°Г ГІГ®Г°Г : " << e.what() << endl;
         return false;
     }
 }
 
-//регистрирует пациента с уникальным логином
+//Г°ГҐГЈГЁГ±ГІГ°ГЁГ°ГіГҐГІ ГЇГ Г¶ГЁГҐГ­ГІГ  Г± ГіГ­ГЁГЄГ Г«ГјГ­Г»Г¬ Г«Г®ГЈГЁГ­Г®Г¬
 bool AuthSystem::registerPatient(const string& login, const string& pass, const string& fullName) {
     try {
         if (login.empty() || pass.empty() || fullName.empty()) {
-            throw invalid_argument("Логин, пароль и ФИО не могут быть пустыми");
+            throw invalid_argument("Г‹Г®ГЈГЁГ­, ГЇГ Г°Г®Г«Гј ГЁ Г”Г€ГЋ Г­ГҐ Г¬Г®ГЈГіГІ ГЎГ»ГІГј ГЇГіГ±ГІГ»Г¬ГЁ");
         }
 
         string hashedPass = hashPassword(pass);
 
         if (contains<vector<User>>(users, User{ login, "", "", "" })) {
-            throw runtime_error("Пользователь с логином '" + login + "' уже существует");
+            throw runtime_error("ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г± Г«Г®ГЈГЁГ­Г®Г¬ '" + login + "' ГіГ¦ГҐ Г±ГіГ№ГҐГ±ГІГўГіГҐГІ");
         }
 
         users.push_back({ login, hashedPass, "patient", fullName });
         writeFile(filename);
-        cout << "Пациент успешно зарегистрирован!\n";
+        cout << "ГЏГ Г¶ГЁГҐГ­ГІ ГіГ±ГЇГҐГёГ­Г® Г§Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°Г®ГўГ Г­!\n";
         return true;
     }
     catch (const exception& e) {
-        cout << "Ошибка регистрации пациента: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ ГЇГ Г¶ГЁГҐГ­ГІГ : " << e.what() << endl;
         return false;
     }
 }
 
-//добавляет доктора с уникальным логином
+//Г¤Г®ГЎГ ГўГ«ГїГҐГІ Г¤Г®ГЄГІГ®Г°Г  Г± ГіГ­ГЁГЄГ Г«ГјГ­Г»Г¬ Г«Г®ГЈГЁГ­Г®Г¬
 bool AuthSystem::addDoctor(const string& login, const string& pass, const string& fullName) {
     try {
         if (login.empty() || pass.empty() || fullName.empty()) {
-            throw invalid_argument("Логин, пароль и ФИО не могут быть пустыми");
+            throw invalid_argument("Г‹Г®ГЈГЁГ­, ГЇГ Г°Г®Г«Гј ГЁ Г”Г€ГЋ Г­ГҐ Г¬Г®ГЈГіГІ ГЎГ»ГІГј ГЇГіГ±ГІГ»Г¬ГЁ");
         }
 
         string hashedPass = hashPassword(pass);
 
         if (contains<vector<User>>(users, User{ login, "", "", "" })) {
-            throw runtime_error("Пользователь с логином '" + login + "' уже существует");
+            throw runtime_error("ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г± Г«Г®ГЈГЁГ­Г®Г¬ '" + login + "' ГіГ¦ГҐ Г±ГіГ№ГҐГ±ГІГўГіГҐГІ");
         }
 
         users.push_back({ login, hashedPass, "doctor", fullName });
         writeFile(filename);
-        cout << "Доктор успешно добавлен!\n";
+        cout << "Г„Г®ГЄГІГ®Г° ГіГ±ГЇГҐГёГ­Г® Г¤Г®ГЎГ ГўГ«ГҐГ­!\n";
         return true;
     }
     catch (const exception& e) {
-        cout << "Ошибка добавления врача: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГї ГўГ°Г Г·Г : " << e.what() << endl;
         return false;
     }
 }
 
-//проверяет, выполнен ли вход в систему, есть ли пользователь
+//ГЇГ°Г®ГўГҐГ°ГїГҐГІ, ГўГ»ГЇГ®Г«Г­ГҐГ­ Г«ГЁ ГўГµГ®Г¤ Гў Г±ГЁГ±ГІГҐГ¬Гі, ГҐГ±ГІГј Г«ГЁ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј
 bool AuthSystem::isLoggedIn() {
     return !currentLogin.empty();
 }
 
-//возвращает логин текущего пользователя
+//ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г«Г®ГЈГЁГ­ ГІГҐГЄГіГ№ГҐГЈГ® ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
 string AuthSystem::getCurrentLogin() {
     return currentLogin;
 }
 
-//возвращает фио текущего пользователя
+//ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГґГЁГ® ГІГҐГЄГіГ№ГҐГЈГ® ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
 string AuthSystem::getCurrentFullName() {
     return currentFullName;
 }
 
-//находит пользователя по логику и возвращает указатель на него
+//Г­Г ГµГ®Г¤ГЁГІ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЇГ® Г«Г®ГЈГЁГЄГі ГЁ ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  Г­ГҐГЈГ®
 User* AuthSystem::getUserByLogin(const string& login) {
     for (auto& u : users) {
         if (u.login == login)
@@ -208,7 +210,7 @@ User* AuthSystem::getUserByLogin(const string& login) {
     }
     return nullptr;
 }
-//возвращает логин пользователя по ФИО
+//ГўГ®Г§ГўГ°Г Г№Г ГҐГІ Г«Г®ГЈГЁГ­ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЇГ® Г”Г€ГЋ
 string AuthSystem::getLoginByFullName(const string& fullName) {
     for (auto& u : users) {
         if (u.fullName == fullName) {
@@ -217,7 +219,7 @@ string AuthSystem::getLoginByFullName(const string& fullName) {
     }
     return "";
 }
-//обновляет имя в файле
+//Г®ГЎГ­Г®ГўГ«ГїГҐГІ ГЁГ¬Гї Гў ГґГ Г©Г«ГҐ
 bool AuthSystem::updateUserFullName(const string& login, const string& newFullName) {
     try {
         User* user = getUserByLogin(login);
@@ -226,23 +228,23 @@ bool AuthSystem::updateUserFullName(const string& login, const string& newFullNa
             writeFile(filename);
             return true;
         }
-        cout << "Пользователь с логином " << login << " не найден!" << endl;
+        cout << "ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г± Г«Г®ГЈГЁГ­Г®Г¬ " << login << " Г­ГҐ Г­Г Г©Г¤ГҐГ­!" << endl;
         return false;
     }
     catch (const exception& e) {
-        cout << "Ошибка обновления ФИО: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї Г”Г€ГЋ: " << e.what() << endl;
         return false;
     }
 }
-//удаляет пользователя по логину
+//ГіГ¤Г Г«ГїГҐГІ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЇГ® Г«Г®ГЈГЁГ­Гі
 bool AuthSystem::deleteUser(const string& login) {
     try {
         if (login.empty()) {
-            throw invalid_argument("Логин не может быть пустым");
+            throw invalid_argument("Г‹Г®ГЈГЁГ­ Г­ГҐ Г¬Г®Г¦ГҐГІ ГЎГ»ГІГј ГЇГіГ±ГІГ»Г¬");
         }
 
         if (login == currentLogin) {
-            throw runtime_error("Нельзя удалить текущего пользователя. Сначала выйдите из системы.");
+            throw runtime_error("ГЌГҐГ«ГјГ§Гї ГіГ¤Г Г«ГЁГІГј ГІГҐГЄГіГ№ГҐГЈГ® ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї. Г‘Г­Г Г·Г Г«Г  ГўГ»Г©Г¤ГЁГІГҐ ГЁГ§ Г±ГЁГ±ГІГҐГ¬Г».");
         }
 
         bool found = false;
@@ -258,22 +260,22 @@ bool AuthSystem::deleteUser(const string& login) {
         }
 
         if (!found) {
-            throw runtime_error("Пользователь с логином '" + login + "' не найден");
+            throw runtime_error("ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г± Г«Г®ГЈГЁГ­Г®Г¬ '" + login + "' Г­ГҐ Г­Г Г©Г¤ГҐГ­");
         }
 
         writeFile(filename);
         return true;
     }
     catch (const exception& e) {
-        cout << "Ошибка удаления пользователя: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  ГіГ¤Г Г«ГҐГ­ГЁГї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї: " << e.what() << endl;
         return false;
     }
 }
-//проверяет соответствие логина и пароля, при успехе возвращает true и роль
+//ГЇГ°Г®ГўГҐГ°ГїГҐГІ Г±Г®Г®ГІГўГҐГІГ±ГІГўГЁГҐ Г«Г®ГЈГЁГ­Г  ГЁ ГЇГ Г°Г®Г«Гї, ГЇГ°ГЁ ГіГ±ГЇГҐГµГҐ ГўГ®Г§ГўГ°Г Г№Г ГҐГІ true ГЁ Г°Г®Г«Гј
 pair<bool, string> AuthSystem::authenticate(const string& login, const string& pass) {
     try {
         if (login.empty() || pass.empty()) {
-            throw invalid_argument("Логин и пароль не могут быть пустыми");
+            throw invalid_argument("Г‹Г®ГЈГЁГ­ ГЁ ГЇГ Г°Г®Г«Гј Г­ГҐ Г¬Г®ГЈГіГІ ГЎГ»ГІГј ГЇГіГ±ГІГ»Г¬ГЁ");
         }
 
         string hashedPass = hashPassword(pass);
@@ -284,29 +286,30 @@ pair<bool, string> AuthSystem::authenticate(const string& login, const string& p
                 return { true, u.role };
             }
         }
-        throw runtime_error("Неверный логин или пароль");
+        throw runtime_error("ГЌГҐГўГҐГ°Г­Г»Г© Г«Г®ГЈГЁГ­ ГЁГ«ГЁ ГЇГ Г°Г®Г«Гј");
     }
     catch (const exception& e) {
-        cout << "Ошибка аутентификации: " << e.what() << endl;
+        cout << "ГЋГёГЁГЎГЄГ  Г ГіГІГҐГ­ГІГЁГґГЁГЄГ Г¶ГЁГЁ: " << e.what() << endl;
         return { false, "" };
     }
 }
 
-//перегрузка функции authenticate
+//ГЇГҐГ°ГҐГЈГ°ГіГ§ГЄГ  ГґГіГ­ГЄГ¶ГЁГЁ authenticate
 pair<bool, string> AuthSystem::authenticate(const User& user) {
     return authenticate(user.login, user.password);
 }
 
-//выход из системы, сбрасывает текущего пользователя
+//ГўГ»ГµГ®Г¤ ГЁГ§ Г±ГЁГ±ГІГҐГ¬Г», Г±ГЎГ°Г Г±Г»ГўГ ГҐГІ ГІГҐГЄГіГ№ГҐГЈГ® ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
 void AuthSystem::logout() {
     currentLogin = "";
     currentFullName = "";
 }
 
-//проверяет, есть ли в системе админ
+//ГЇГ°Г®ГўГҐГ°ГїГҐГІ, ГҐГ±ГІГј Г«ГЁ Гў Г±ГЁГ±ГІГҐГ¬ГҐ Г Г¤Г¬ГЁГ­
 bool AuthSystem::hasAnyAdmin() {
     for (auto& u : users) {
         if (u.role == "admin") return true;
     }
     return false;
+
 }
